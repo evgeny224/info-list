@@ -1,4 +1,4 @@
-import Header from "./Components/Header.jsx";
+import Header from "./Components/Header/Header.jsx";
 import { BrowserRouter, Route, Switch} from "react-router-dom";
 import InformationPage from "./Pages/InformationPage/InformationPage";
 import ExperiencePage from "./Pages/ExperiencePage/ExperiencePage";
