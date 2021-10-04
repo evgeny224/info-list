@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import style from "./CoreInformation.module.css";
+import style from "./UserInfoInput.module.css";
 import Button from '@material-ui/core/Button';
-import { styled } from "../../../node_modules/@material-ui/core/styles";
+import UserInfoOutputContainer from "../UserInfoOutput/UserInfoOutputContainer";
+import { styled } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { infoReducerAC } from "../../Redux/info-reducer";
 
 
 const Input = styled('input')({
@@ -11,12 +14,19 @@ const Input = styled('input')({
 
 
 
-    export default function CoreInformation (){
+    export default function UserInfoInput (props){
+        console.log(props)
     
         const { register, handleSubmit, watch, formState: { errors } } = useForm();
-        const onSubmit = data => console.log(data)
+        
+        // const onSubmit = data => console.log(data)
 
-        console.log(watch("example"));
+
+        const onSubmit = (data) => {
+            console.log(data)
+            props.addUserInfo(data);
+        }
+
 
 
         const [state, setState] = useState([]);
@@ -230,3 +240,4 @@ const Input = styled('input')({
 
 
 
+    connect(({ firstName, lastName }) => ({ firstName, lastName }), infoReducerAC)(UserInfoInput);
