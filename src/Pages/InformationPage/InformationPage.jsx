@@ -1,21 +1,84 @@
 import React from "react";
 import { MainContainer } from "../../Components/MainContainer/MainContainer";
 import styles from "./InformationPage.module.css"
+import { useHistory } from "react-router-dom";
 import { Form } from "../../Components/Form/Form";
-import { ImageInput } from "../../Components/ImageInput/ImageInput"
 import { useForm } from "react-hook-form";
-import { TextInput } from "../../Components/TextInput/TextInput";
-import { CurrencyInput } from "../../Components/CurrencyInput/CurrencyInput";
-import { GenderInput } from "../../Components/GenderInput/GenderInput";
 import { MainButton } from "../../Components/MainButton/MainButton";
+import { TextField } from "@material-ui/core";
+import { styled } from "@material-ui/core/styles";
+import Button from '@material-ui/core/Button';
+import { MenuItem } from "@material-ui/core";
+
+
+
+const Input = styled('input')({
+    display: 'none',
+});
+
+
+const genders = [
+    {
+      value: 'Мужчина',
+      label: 'Мужчина',
+    },
+    {
+      value: 'Женщина',
+      label: 'Женщина',
+    },
+  ];
+
+  const currencies = [
+    {
+      value: 'USD',
+      label: '$',
+    },
+    {
+      value: 'EUR',
+      label: '€',
+    },
+    {
+      value: 'BTC',
+      label: '฿',
+    },
+    {
+      value: 'JPY',
+      label: '¥',
+    },
+    {
+        value: 'RUB',
+        label: '₽'
+    }
+  ];
+
+
+
 
     const InformationPage = () => {
-        const { register, handleSubmit, errors } = useForm({
+
+      const history = useHistory();
+
+
+        const [gender, setGender] = React.useState('Мужчина');
+
+        const handleChange = (event) => {
+            setGender(event.target.value);
+        };
+
+        const [currency, setCurrency] = React.useState('EUR');
+
+        const handleChangeCurrency = (event) => {
+            setCurrency(event.target.value);
+        };
+
+
+
+        const { register, handleSubmit, formState: { errors } } = useForm({
             mode: "onBlur"
         })
 
-        const onSubmit = (state) => {
-            console.log(state)
+        const onSubmit = (data) => {
+            history.push("/experience");
         }
 
 
@@ -25,22 +88,44 @@ import { MainButton } from "../../Components/MainButton/MainButton";
                     <h2>1 Основная информация.</h2>
                 </div>
                 <Form onSubmit = {handleSubmit(onSubmit)}>
-                    <ImageInput ref={register('foto')} id="foto" />
-                    <TextInput label="Имя" ref={register('firstName')}  id="firstName" type="text" name = "Имя"/>
-                    <TextInput label="Фамилия" ref={register('family')}  id="family" type="text" name = "Фамилия"/>
-                    <TextInput label="Отчество" ref={register('lastName')}  id="lastName" type="text" name = "Отчество"/>
-                    <TextInput label="Город проживания" ref={register('city')}  id="city'" type="text" name = "Город проживания"/>
-                    <GenderInput id="outlined-select-currency" select label="Пол" ref={register('sex')} name = "Пол"/>
-                    <TextInput label="Дата рождения" ref={register('dateofBirth')}  id="dateofBirth" type="text" name = "Дата рождения"/>
-                    <TextInput label="Гражданство" ref={register('cityzenship')}  id="cityzenship" type="text" name = "Гражданство"/>
-                    <TextInput label="Желаемая должность" ref={register('vocation')}  id="vocation" type="text" name = "Желаемая должность"/>
-                    <TextInput label="Зарплата" ref={register('salary')}  id="salary" type="text" name = "Зарплата"/>
-                    <CurrencyInput id="outlined-select-currency" select label="Выбор" ref={register('name')} name = "Валюта"/>
-                    <TextInput label="О себе" ref={register('aboutMyself')}  id="aboutMyself" type="text" name = "О себе"/>
+                    <label htmlFor="contained-button-file"  className={styles.image}>
+                        <Input accept="image/*" id="contained-button-file"   multiple type="file" />
+                        <Button variant="contained" component="span">
+                            Загрузить Фото
+                        </Button>
+                    </label>
+                    <TextField label="Имя" fullWidth variant="outlined" margin="normal" {...register("firstName", { required: "Это поле необходимо заполнить"})} id="firstName"/>
+                      {errors.firstName && <p>{errors.firstName.message}</p>}
+                    <TextField label="Фамилия" fullWidth variant="outlined" margin="normal" {...register("family", { required: "Это поле необходимо заполнить" })} id="family"/>
+                      {errors.family && <p>{errors.family.message}</p>} 
+                    <TextField label="Отчество" fullWidth variant="outlined" margin="normal" {...register("lastName")} id="lastName"/>
+                    <TextField label="Город проживания" fullWidth variant="outlined" margin="normal" {...register("city", { required: "Это поле необходимо заполнить" })} id="city"/>
+                      {errors.city && <p>{errors.city.message}</p>} 
+                    <TextField label="Дата рождения" fullWidth variant="outlined" margin="normal" {...register("dateofBirth", { required: "Это поле необходимо заполнить" })} id="city"/>
+                      {errors.dateofBirth && <p>{errors.dateofBirth.message}</p>} 
+                    <TextField value={gender} {...register("gender", { required: "Это поле необходимо заполнить" })}  label="Пол" id="gender"
+                        select onChange={handleChange} helperText="Пожалуйста выберите ваш пол" variant="outlined" margin="normal" >
+                        {genders.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                        </MenuItem>))}
+                    </TextField>
+                      {errors.gender && <p>{errors.gender.message}</p>} 
+                    <TextField label="Гражданство" fullWidth variant="outlined" margin="normal" {...register("cityzenship", { required: "Это поле необходимо заполнить" })} id="cityzenship"/>
+                      {errors.cityzenship && <p>{errors.cityzenship.message}</p>} 
+                    <TextField label="Желаемая должность" fullWidth variant="outlined" margin="normal" {...register("vocation", { required: "Это поле необходимо заполнить" })} id="vocation"/>
+                      {errors.vocation && <p>{errors.vocation.message}</p>} 
+                    <TextField label="Зарплата" fullWidth variant="outlined" margin="normal" {...register("salary", { required: "Это поле необходимо заполнить" })} id="salary"/>
+                      {errors.salary && <p>{errors.salary.message}</p>} 
+                    <TextField value={currency} select onChange={handleChangeCurrency} {...register("currency")}  label="Валюта" id="currency"
+                        helperText="Пожалуйста выберите валюту" variant="outlined" margin="normal">
+                        {currencies.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>))}
+                    </TextField>
+                    <TextField label="О себе" fullWidth variant="outlined" margin="normal" {...register("aboutMyself")} id="aboutMyself"/>
                     <MainButton>Далее</MainButton>
                 </Form>
             </MainContainer>
         )
     }
-
     export default InformationPage;
