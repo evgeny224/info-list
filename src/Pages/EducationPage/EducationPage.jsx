@@ -10,6 +10,10 @@ import Button from '@material-ui/core/Button';
 import Language from "../../Components/ForeignLanguage/ForeignLanguage";
 import Education from "../../Components/Education/Education";
 import { MainButton } from "../../Components/MainButton/MainButton";
+import  { useData } from "../../DataContext";
+
+
+
 
 const education = [
     {
@@ -64,8 +68,19 @@ const languageLevel = [
 
         const history = useHistory();
 
+        const {data, setValues} = useData()
+
+        const onSubmit = (data) => {
+            history.push("/review");
+            setValues(data);
+        }
+
 
         const { register, handleSubmit, formState: { errors } } = useForm({
+            dafaultValues: {
+                firstName: data.nativeLanguage,
+                family: data.foreignLanguage,
+            },
             mode: "onBlur"
         })
 
@@ -100,7 +115,7 @@ const languageLevel = [
 
         return(
             <MainContainer>
-                <Form>
+                <Form onSubmit = {handleSubmit(onSubmit)}>
                     <div className = {style.title}>
                         <h2>3 Образование.</h2>
                     </div>

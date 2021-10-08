@@ -9,7 +9,7 @@ import { TextField } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
 import Button from '@material-ui/core/Button';
 import { MenuItem } from "@material-ui/core";
-
+import  { useData } from "../../DataContext";
 
 
 const Input = styled('input')({
@@ -53,11 +53,11 @@ const genders = [
 
 
 
-
     const InformationPage = () => {
 
-      const history = useHistory();
+      const history = useHistory()
 
+      const {data, setValues} = useData()
 
         const [gender, setGender] = React.useState('Мужчина');
 
@@ -72,13 +72,17 @@ const genders = [
         };
 
 
-
         const { register, handleSubmit, formState: { errors } } = useForm({
-            mode: "onBlur"
+          dafaultValues: {
+            firstName: data.firstName,
+            family: data.family,
+          },
+          mode: "onBlur",
         })
 
         const onSubmit = (data) => {
             history.push("/experience");
+            setValues(data);
         }
 
 
@@ -89,12 +93,12 @@ const genders = [
                 </div>
                 <Form onSubmit = {handleSubmit(onSubmit)}>
                     <label htmlFor="contained-button-file"  className={styles.image}>
-                        <Input accept="image/*" id="contained-button-file"   multiple type="file" />
+                        <Input accept="image/*" id="contained-button-file"   multiple type="file" {...register("foto")} /> 
                         <Button variant="contained" component="span">
                             Загрузить Фото
                         </Button>
                     </label>
-                    <TextField label="Имя" fullWidth variant="outlined" margin="normal" {...register("firstName", { required: "Это поле необходимо заполнить"})} id="firstName"/>
+                    <TextField label="Имя" fullWidth variant="outlined" margin="normal" {...register("firstName", { required: "Это поле необходимо заполнить" })} id="firstName"/>
                       {errors.firstName && <p>{errors.firstName.message}</p>}
                     <TextField label="Фамилия" fullWidth variant="outlined" margin="normal" {...register("family", { required: "Это поле необходимо заполнить" })} id="family"/>
                       {errors.family && <p>{errors.family.message}</p>} 

@@ -13,14 +13,20 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { Button } from "@material-ui/core";
 import Expirience from "../../Components/Experience/Experience";
 import { MainButton } from "../../Components/MainButton/MainButton";
-
+import  { useData } from "../../DataContext";
 
 
     const ExperiencePage = () => {
 
         const history = useHistory();
 
+        const {data, setValues} = useData()
+
         const {  register, handleSubmit, formState: { errors }, watch } = useForm({
+            dafaultValues: {
+                firstName: data.monthStart,
+                family: data.yearStart,
+            },
             mode: "onBlur"
     });
 
@@ -37,6 +43,7 @@ import { MainButton } from "../../Components/MainButton/MainButton";
 
             const onSubmit = (data) => {
                 history.push("/education");
+                setValues(data);
             }
 
 
